@@ -94,6 +94,13 @@ class Task_Migrations_Run extends Minion_Task
 			}
 		}
 
+		// add config-dir to the kohana config path array. this is so we can
+		// set apply the test configs when using the cli
+		$config_dir = Arr::get($config, 'config-dir', NULL);
+		if ($config_dir && file_exists(APPPATH.'config/'.$config_dir)) {
+			Kohana::$config->attach(new Config_File('config/'.$config_dir));
+		}
+
 		$db        = Database::instance();
 		$model     = new Model_Minion_Migration($db);
 
